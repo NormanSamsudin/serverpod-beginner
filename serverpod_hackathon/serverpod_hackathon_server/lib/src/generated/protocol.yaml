@@ -1,3 +1,5 @@
+ai:
+  - askQuestion:
 emailIdp:
   - login:
   - startRegistration:

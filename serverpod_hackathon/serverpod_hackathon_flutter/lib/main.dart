@@ -56,33 +56,112 @@ class MyHomePage extends StatefulWidget {
   MyHomePageState createState() => MyHomePageState();
 }
 
+// class MyHomePageState extends State<MyHomePage> {
+//   bool _isSignedIn = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     client.auth.authInfoListenable.addListener(_updateSignedInState);
+//     _isSignedIn = client.auth.isAuthenticated;
+//   }
+
+//   @override
+//   void dispose() {
+//     client.auth.authInfoListenable.removeListener(_updateSignedInState);
+//     super.dispose();
+//   }
+
+//   void _updateSignedInState() {
+//     setState(() {
+//       _isSignedIn = client.auth.isAuthenticated;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text(widget.title)),
+//       body: _isSignedIn ? const ConnectedScreen() : const SignInScreen(),
+//     );
+//   }
+// }
+
 class MyHomePageState extends State<MyHomePage> {
-  bool _isSignedIn = false;
+  /// Holds the last result or null if no result exists yet.
+  String? _resultMessage;
 
-  @override
-  void initState() {
-    super.initState();
-    client.auth.authInfoListenable.addListener(_updateSignedInState);
-    _isSignedIn = client.auth.isAuthenticated;
-  }
+  /// Holds the last error message that we've received from the server or null if no
+  /// error exists yet.
+  String? _errorMessage;
 
-  @override
-  void dispose() {
-    client.auth.authInfoListenable.removeListener(_updateSignedInState);
-    super.dispose();
-  }
+  final _textEditingController = TextEditingController();
 
-  void _updateSignedInState() {
-    setState(() {
-      _isSignedIn = client.auth.isAuthenticated;
-    });
+  bool _loading = false;
+
+  void _askAiQuestion() async {
+    try {
+      setState(() {
+        _errorMessage = null;
+        _resultMessage = null;
+        _loading = true;
+      });
+      final result = await client.ai.askQuestion(
+        _textEditingController.text,
+      );
+      setState(() {
+        _errorMessage = null;
+        _resultMessage = result;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = '$e';
+        _resultMessage = null;
+        _loading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: _isSignedIn ? const ConnectedScreen() : const SignInScreen(),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: TextField(
+                controller: _textEditingController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter your ingredients',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: ElevatedButton(
+                onPressed: _loading ? null : _askAiQuestion,
+                child: _loading
+                    ? const Text('Loading...')
+                    : const Text('Generate Recipe'),
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: ResultDisplay(
+                  resultMessage: _resultMessage,
+                  errorMessage: _errorMessage,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
