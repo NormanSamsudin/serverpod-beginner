@@ -3,7 +3,7 @@ description: A new Flutter project with Serverpod.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -18,8 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '^3.8.0'
-  flutter: '^3.32.0'
+  sdk: "^3.8.0"
+  flutter: "^3.32.0"
 
 dependencies:
   # The following adds the Cupertino Icons font to your application.
@@ -27,21 +27,29 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
   serverpod_hackathon_client:
     path: ../serverpod_hackathon_client
   serverpod_flutter: 3.0.1
   serverpod_auth_idp_flutter: 3.0.1
+  auto_route: ^9.2.2
+  provider: ^6.1.2
 
 dev_dependencies:
-  flutter_lints: '>=3.0.0 <7.0.0'
+  flutter_lints: ">=3.0.0 <7.0.0"
   flutter_test:
     sdk: flutter
+  auto_route_generator: ^9.0.0
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

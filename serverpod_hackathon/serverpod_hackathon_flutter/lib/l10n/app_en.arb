@@ -1,0 +1,67 @@
+{
+  "@@locale": "en",
+  "appTitle": "Serverpod Recipe",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  "homeTab": "Home",
+  "@homeTab": {
+    "description": "Home tab label"
+  },
+  "profileTab": "Profile",
+  "@profileTab": {
+    "description": "Profile tab label"
+  },
+  "settingsTab": "Settings",
+  "@settingsTab": {
+    "description": "Settings tab label"
+  },
+  "enterIngredients": "Enter your ingredients",
+  "@enterIngredients": {
+    "description": "Hint text for ingredients input"
+  },
+  "generateRecipe": "Generate Recipe",
+  "@generateRecipe": {
+    "description": "Button text to generate recipe"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading state text"
+  },
+  "noResponseYet": "No server response yet.",
+  "@noResponseYet": {
+    "description": "Default message when no response"
+  },
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "Sign in button text"
+  },
+  "signOut": "Sign Out",
+  "@signOut": {
+    "description": "Sign out button text"
+  },
+  "youAreConnected": "You are connected",
+  "@youAreConnected": {
+    "description": "Message when user is authenticated"
+  },
+  "enterYourName": "Enter your name",
+  "@enterYourName": {
+    "description": "Hint text for name input"
+  },
+  "sendToServer": "Send to Server",
+  "@sendToServer": {
+    "description": "Button to send data to server"
+  },
+  "recipeGenerator": "Recipe Generator",
+  "@recipeGenerator": {
+    "description": "Recipe generator page title"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile page title"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page title"
+  }
+}
