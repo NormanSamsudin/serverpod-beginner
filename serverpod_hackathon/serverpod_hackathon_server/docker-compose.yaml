@@ -1,0 +1,44 @@
+services:
+  # Development services
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "8090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: serverpod_hackathon
+      POSTGRES_PASSWORD: "irGsemXUUyxXtLcfDIsHa2SwMzquDKzz"
+    volumes:
+      - serverpod_hackathon_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2.6
+    ports:
+      - "8091:6379"
+    command: redis-server --requirepass "DCm3htUzhf6d3R_JBh_tzfoPtRC4PU88"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  # Test services
+  postgres_test:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "9090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: serverpod_hackathon_test
+      POSTGRES_PASSWORD: "_g7O-Tl-kQ4nc3ts0MMeh2hauF8P2Jr2"
+    volumes:
+      - serverpod_hackathon_test_data:/var/lib/postgresql/data
+
+  redis_test:
+    image: redis:6.2.6
+    ports:
+      - "9091:6379"
+    command: redis-server --requirepass "prV4FnUCDiBBvxY-TakK9fOeZosfi5FK"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+volumes:
+  serverpod_hackathon_data:
+  serverpod_hackathon_test_data:
