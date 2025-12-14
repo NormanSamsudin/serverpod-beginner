@@ -14,11 +14,13 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../ai_endpoint.dart' as _i2;
 import '../endpoints/email_idp_endpoint.dart' as _i3;
 import '../endpoints/jwt_refresh_endpoint.dart' as _i4;
-import '../greeting_endpoint.dart' as _i5;
+import '../endpoints/menu_seed_endpoint.dart' as _i5;
+import '../endpoints/rag_endpoint.dart' as _i6;
+import '../greeting_endpoint.dart' as _i7;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
-    as _i6;
+    as _i8;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
-    as _i7;
+    as _i9;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -42,7 +44,19 @@ class Endpoints extends _i1.EndpointDispatch {
           'jwtRefresh',
           null,
         ),
-      'greeting': _i5.GreetingEndpoint()
+      'menuSeed': _i5.MenuSeedEndpoint()
+        ..initialize(
+          server,
+          'menuSeed',
+          null,
+        ),
+      'rag': _i6.RagEndpoint()
+        ..initialize(
+          server,
+          'rag',
+          null,
+        ),
+      'greeting': _i7.GreetingEndpoint()
         ..initialize(
           server,
           'greeting',
@@ -267,6 +281,75 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
+    connectors['menuSeed'] = _i1.EndpointConnector(
+      name: 'menuSeed',
+      endpoint: endpoints['menuSeed']!,
+      methodConnectors: {
+        'seedMenuData': _i1.MethodConnector(
+          name: 'seedMenuData',
+          params: {},
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['menuSeed'] as _i5.MenuSeedEndpoint)
+                  .seedMenuData(session),
+        ),
+      },
+    );
+    connectors['rag'] = _i1.EndpointConnector(
+      name: 'rag',
+      endpoint: endpoints['rag']!,
+      methodConnectors: {
+        'chat': _i1.MethodConnector(
+          name: 'chat',
+          params: {
+            'userMessage': _i1.ParameterDescription(
+              name: 'userMessage',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['rag'] as _i6.RagEndpoint).chat(
+                session,
+                params['userMessage'],
+              ),
+        ),
+        'generateMenuEmbedding': _i1.MethodConnector(
+          name: 'generateMenuEmbedding',
+          params: {
+            'menuItemId': _i1.ParameterDescription(
+              name: 'menuItemId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['rag'] as _i6.RagEndpoint).generateMenuEmbedding(
+                    session,
+                    params['menuItemId'],
+                  ),
+        ),
+        'generateAllEmbeddings': _i1.MethodConnector(
+          name: 'generateAllEmbeddings',
+          params: {},
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['rag'] as _i6.RagEndpoint)
+                  .generateAllEmbeddings(session),
+        ),
+      },
+    );
     connectors['greeting'] = _i1.EndpointConnector(
       name: 'greeting',
       endpoint: endpoints['greeting']!,
@@ -284,16 +367,16 @@ class Endpoints extends _i1.EndpointDispatch {
               (
                 _i1.Session session,
                 Map<String, dynamic> params,
-              ) async => (endpoints['greeting'] as _i5.GreetingEndpoint).hello(
+              ) async => (endpoints['greeting'] as _i7.GreetingEndpoint).hello(
                 session,
                 params['name'],
               ),
         ),
       },
     );
-    modules['serverpod_auth_idp'] = _i6.Endpoints()
+    modules['serverpod_auth_idp'] = _i8.Endpoints()
       ..initializeEndpoints(server);
-    modules['serverpod_auth_core'] = _i7.Endpoints()
+    modules['serverpod_auth_core'] = _i9.Endpoints()
       ..initializeEndpoints(server);
   }
 }

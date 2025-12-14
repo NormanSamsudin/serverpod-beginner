@@ -1,6 +1,6 @@
-# Serverpod Recipe Generator
+# Food Court RAG Assistant
 
-A full-stack Dart application using Serverpod backend and Flutter frontend with AI recipe generation powered by Google Gemini and Firebase Authentication.
+A full-stack Dart application using Serverpod backend and Flutter frontend with AI-powered food recommendations using **RAG (Retrieval-Augmented Generation)**, Google Gemini embeddings, and Firebase Authentication.
 
 ## 🚀 Quick Start
 
@@ -51,19 +51,90 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
+### 4. Initialize RAG (First-time Setup)
+
+After starting the server, you need to populate the menu and generate embeddings:
+
+```bash
+# In the Flutter app or using Serverpod Insights:
+
+# 1. Seed menu data (15 sample food court items)
+await client.menuSeed.seedMenuData();
+
+# 2. Generate embeddings for all menu items
+# This converts each dish to a 768-dimensional vector
+# Takes ~2-3 minutes depending on number of items
+await client.rag.generateAllEmbeddings();
+
+# Now you can start chatting!
+```
+
+**What the embeddings do:**
+- Convert menu items into numerical vectors that capture meaning
+- Enable semantic search (e.g., "spicy" finds dishes with high spice levels)
+- Allow AI to recommend actual menu items with accurate details
+
 ## 📱 Features
 
+### 🤖 RAG (Retrieval-Augmented Generation)
+
+The app uses advanced RAG technology to provide intelligent food recommendations:
+
+**What is RAG?**
+- **Retrieval**: Searches your food court menu database using semantic similarity
+- **Augmented**: Adds relevant menu items as context to the AI
+- **Generation**: AI creates personalized responses based on actual menu data
+
+**How It Works:**
+
+1. **Setup Phase (One-time)**
+   - Menu items are stored in PostgreSQL database
+   - Each item is converted to a 768-dimensional vector embedding using Google's `text-embedding-004` model
+   - Embeddings capture the "meaning" of each dish (cuisine, ingredients, dietary info, price, etc.)
+
+2. **Chat Phase (Every message)**
+   ```
+   User: "I want something spicy and cheap"
+   ↓
+   1. Convert query to vector embedding
+   ↓
+   2. Calculate cosine similarity with all menu items
+   ↓
+   3. Retrieve top 10 most relevant dishes
+      (e.g., Mee Goreng 0.92, Nasi Lemak 0.87, Rendang 0.85)
+   ↓
+   4. Format retrieved items as context
+   ↓
+   5. Send to Gemini 1.5 Flash with context
+   ↓
+   6. AI generates personalized recommendation
+   ↓
+   "Try Mee Goreng for RM6.50 - our spiciest dish at level 4/5!"
+   ```
+
+**Why RAG vs Regular AI?**
+- ❌ **Without RAG**: AI guesses menu items, may be inaccurate
+- ✅ **With RAG**: AI recommends actual menu items with real prices and details
+
+**Example Queries:**
+- "Show me vegetarian options under RM8"
+- "What halal Chinese dishes do you have?"
+- "I want something healthy for lunch"
+- "Give me your spiciest dish"
+
 ### Backend (Serverpod)
-- **AI Recipe Generation** - Uses Google Gemini API to generate recipes from ingredients
-- **Greeting Endpoint** - Simple hello world endpoint
-- **PostgreSQL Database** - With migrations support
+- **RAG Chat Endpoint** - Semantic search + AI-powered responses
+- **Vector Embeddings** - Google Gemini text-embedding-004
+- **Menu Management** - CRUD operations for food court items
+- **Similarity Search** - Cosine similarity for finding relevant dishes
+- **PostgreSQL Database** - Stores menu items with vector embeddings
 - **Redis Cache** - For session management
 
 ### Frontend (Flutter)
+- **Chatbot UI** - Modern chat interface for food recommendations
 - **Firebase Authentication** - Email/password authentication with auto-routing
 - **MVVM Architecture** - Clean separation of concerns with ViewModels
 - **Auto Route Navigation** - Type-safe routing with auth guards
-- **Chatbot UI** - Modern chat interface for recipe generation
 - **Base Screen Pattern** - Reusable screen structure for consistency
 - **Bottom Navigation** - 3 tabs (Home, Profile, Settings)
 - **Localization Support** - i18n ready with ARB files
@@ -75,16 +146,22 @@ flutter run
 serverpod_hackathon/
 ├── serverpod_hackathon_server/    # Backend server
 │   ├── lib/src/
-│   │   ├── ai_endpoint.dart       # Recipe generation endpoint
-│   │   └── greeting_endpoint.dart # Hello endpoint
-│   ├── config/                    # Server configuration
-│   └── docker-compose.yaml        # Database setup
+│   │   ├── endpoints/
+│   │   │   ├── rag_endpoint.dart          # RAG chat + embeddings
+│   │   │   ├── menu_seed_endpoint.dart    # Seed sample menu data
+│   │   │   └── ai_endpoint.dart           # Basic AI endpoint
+│   │   ├── services/
+│   │   │   └── embedding_service.dart     # Google Gemini embeddings
+│   │   └── protocol/
+│   │       └── menu_item.yaml            # Menu item schema
+│   ├── config/                           # Server configuration
+│   └── docker-compose.yaml               # Database setup
 │
 ├── serverpod_hackathon_flutter/   # Flutter app
 │   ├── lib/
 │   │   ├── viewmodels/           # Business logic
 │   │   │   ├── auth_viewmodel.dart       # Firebase auth
-│   │   │   ├── recipe_viewmodel.dart     # Recipe generation
+│   │   │   ├── recipe_viewmodel.dart     # RAG chat logic
 │   │   │   └── greeting_viewmodel.dart   # Greeting logic
 │   │   ├── views/                # UI screens & widgets
 │   │   │   └── screens/
@@ -92,7 +169,7 @@ serverpod_hackathon/
 │   │   │       ├── auth_wrapper_screen.dart  # Auth routing
 │   │   │       ├── login_screen.dart         # Login UI
 │   │   │       ├── register_screen.dart      # Registration UI
-│   │   │       ├── home_screen.dart          # Chatbot UI
+│   │   │       ├── home_screen.dart          # Food court chatbot
 │   │   │       ├── profile_screen.dart       # User profile
 │   │   │       └── settings_screen.dart      # App settings
 │   │   ├── router/               # Navigation
@@ -331,9 +408,9 @@ flutterfire configure
 
 ### Backend
 - **Serverpod 3.0** - Dart backend framework
-- **PostgreSQL 16** - Database with pgvector
+- **PostgreSQL 16** - Database for menu items and embeddings
 - **Redis 6.2** - Cache and session store
-- **Google Gemini API** - AI recipe generation via dartantic_ai
+- **Google Gemini API** - Text embeddings (text-embedding-004) & chat (gemini-1.5-flash)
 
 ### Frontend
 - **Flutter 3.32** - Cross-platform UI framework
@@ -342,7 +419,21 @@ flutterfire configure
 - **Auto Route** - Type-safe navigation
 - **Flutter Intl** - Localization
 
+### RAG Components
+- **Vector Embeddings** - 768-dimensional semantic representations
+- **Cosine Similarity** - Measures semantic relevance between query and menu items
+- **Semantic Search** - Natural language understanding for food queries
+- **Context Augmentation** - Retrieved menu items enhance AI responses
+
 ## 🚀 Next Steps (Optional Enhancements)
+
+### RAG Enhancements
+1. **Add More Menu Items**: Expand the food court database
+2. **Image Embeddings**: Use multimodal embeddings for food photos
+3. **User Preferences**: Learn from user favorites to personalize recommendations
+4. **Dietary Filters**: Advanced filtering for allergies and dietary restrictions
+5. **Price Range Search**: Budget-aware recommendations
+6. **Real-time Availability**: Track which stalls are open/closed
 
 ### Authentication
 1. **Add Social Logins**: Google Sign-In, Apple Sign-In
@@ -351,17 +442,19 @@ flutterfire configure
 4. **Custom Email Templates**: Configure in Firebase Console
 
 ### Features
-1. **Recipe Favorites**: Save favorite recipes
-2. **Recipe History**: View past generated recipes
-3. **Share Recipes**: Share via social media
-4. **Offline Support**: Cache recipes locally
-5. **Push Notifications**: Recipe of the day
+1. **Order History**: Track user's previous orders
+2. **Favorites**: Save favorite dishes
+3. **Ratings & Reviews**: User feedback on dishes
+4. **Share Recommendations**: Share via social media
+5. **Nutrition Info**: Calorie and nutrition tracking
+6. **Push Notifications**: Daily deals and recommendations
 
 ### UI/UX
 1. **Dark Mode**: Theme switching
-2. **Recipe Images**: AI-generated recipe images
-3. **Voice Input**: Speak ingredients
-4. **Recipe Categories**: Filter by cuisine type
+2. **Food Images**: Display dish photos in chat
+3. **Voice Input**: Speak your food preferences
+4. **Multi-language**: Support multiple languages
+5. **Map View**: Show stall locations in food court
 
 ## 📖 Learn More
 
@@ -369,6 +462,108 @@ flutterfire configure
 - [Flutter Documentation](https://docs.flutter.dev)
 - [Firebase Auth Documentation](https://firebase.google.com/docs/auth/flutter/start)
 - [FlutterFire Documentation](https://firebase.flutter.dev/)
+- [Google Gemini API](https://ai.google.dev/gemini-api/docs)
+- [RAG Introduction](https://aws.amazon.com/what-is/retrieval-augmented-generation/)
+- [Understanding Vector Embeddings](https://developers.google.com/machine-learning/crash-course/embeddings/video-lecture)
+
+## 🎓 How RAG Works - Technical Deep Dive
+
+### Vector Embeddings Explained
+
+**What are embeddings?**
+- Numerical representations of text in 768-dimensional space
+- Similar meanings = similar vectors
+- Example: "spicy noodles" and "hot pasta" have nearby vectors
+
+**Example embedding generation:**
+```dart
+// Menu item text
+"Name: Mee Goreng. Description: Stir-fried yellow noodles with spicy sauce. 
+ Category: Main Course. Cuisine: Malaysian. Halal. Spicy level 4. Price: RM6.50"
+
+// Sent to Google text-embedding-004
+↓
+// Returns 768 numbers representing meaning
+[0.23, -0.45, 0.12, 0.67, -0.34, ... 763 more numbers]
+```
+
+### Cosine Similarity
+
+Measures how similar two vectors are (range: -1 to 1):
+```
+similarity = dot(A, B) / (||A|| × ||B||)
+
+User query:     [0.15, -0.38, 0.27, ...]
+Mee Goreng:     [0.18, -0.42, 0.20, ...]
+Similarity:     0.92 (very similar!)
+
+Chicken Rice:   [0.05, -0.10, 0.15, ...]
+Similarity:     0.35 (less relevant)
+```
+
+### Complete RAG Pipeline
+
+```
+1. USER QUERY
+   "I want something spicy and cheap"
+
+2. EMBEDDING GENERATION
+   Query → [0.15, -0.38, 0.27, ...] (768 dimensions)
+
+3. SIMILARITY SEARCH
+   Compare with all menu item embeddings:
+   - Mee Goreng:    0.92 ⭐
+   - Nasi Lemak:    0.87 ⭐
+   - Rendang:       0.85 ⭐
+   - Chicken Rice:  0.35
+   - Palak Paneer:  0.42
+
+4. RETRIEVE TOP ITEMS
+   Top 10 most similar dishes retrieved
+
+5. FORMAT CONTEXT
+   • Mee Goreng - RM6.50
+     Restaurant: Kopitiam Corner
+     Cuisine: Malaysian | Category: Main Course
+     🕌 Halal | 🌶️ Spicy Level: 4/5
+     Stir-fried yellow noodles with spicy sauce...
+
+6. AUGMENT AI PROMPT
+   "You are a food court assistant. Based on these menu items:
+    [Retrieved items]
+    
+    User Question: I want something spicy and cheap
+    
+    Provide personalized recommendations..."
+
+7. GENERATE RESPONSE
+   Gemini 1.5 Flash creates response using context:
+   "Great choice! I recommend Mee Goreng for RM6.50 - it's 
+    our spiciest dish at level 4/5 and super affordable!"
+
+8. RETURN TO USER
+   Display AI response in chat interface
+```
+
+### Database Schema
+
+```yaml
+menu_item:
+  id: int (primary key)
+  restaurantName: String      # "Wong's Kitchen"
+  name: String                # "Char Kway Teow"
+  description: String         # "Stir-fried rice noodles..."
+  price: double               # 8.50
+  category: String            # "Main Course"
+  cuisine: String             # "Chinese"
+  isVegetarian: bool          # false
+  isHalal: bool               # true
+  spicyLevel: int             # 3 (scale 0-5)
+  allergens: String?          # "Shellfish, Soy"
+  tags: String?               # "Popular, Recommended"
+  imageUrl: String?           # URL to food photo
+  embedding: String           # "[0.23, -0.45, 0.12, ...]"
+```
 
 ## 🤝 Contributing
 

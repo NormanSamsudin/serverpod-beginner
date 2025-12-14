@@ -252,6 +252,52 @@ class EndpointJwtRefresh extends _i4.EndpointRefreshJwtTokens {
   );
 }
 
+/// {@category Endpoint}
+class EndpointMenuSeed extends _i1.EndpointRef {
+  EndpointMenuSeed(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'menuSeed';
+
+  /// Seed sample food court menu data
+  _i2.Future<int> seedMenuData() => caller.callServerEndpoint<int>(
+    'menuSeed',
+    'seedMenuData',
+    {},
+  );
+}
+
+/// {@category Endpoint}
+class EndpointRag extends _i1.EndpointRef {
+  EndpointRag(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'rag';
+
+  /// Chat with RAG - retrieves relevant menu items and generates response
+  _i2.Future<String> chat(String userMessage) =>
+      caller.callServerEndpoint<String>(
+        'rag',
+        'chat',
+        {'userMessage': userMessage},
+      );
+
+  /// Generate and store embeddings for a menu item
+  _i2.Future<void> generateMenuEmbedding(int menuItemId) =>
+      caller.callServerEndpoint<void>(
+        'rag',
+        'generateMenuEmbedding',
+        {'menuItemId': menuItemId},
+      );
+
+  /// Generate embeddings for all menu items
+  _i2.Future<int> generateAllEmbeddings() => caller.callServerEndpoint<int>(
+    'rag',
+    'generateAllEmbeddings',
+    {},
+  );
+}
+
 /// This is an example endpoint that returns a greeting message through
 /// its [hello] method.
 /// {@category Endpoint}
@@ -313,6 +359,8 @@ class Client extends _i1.ServerpodClientShared {
     ai = EndpointAi(this);
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
+    menuSeed = EndpointMenuSeed(this);
+    rag = EndpointRag(this);
     greeting = EndpointGreeting(this);
     modules = Modules(this);
   }
@@ -323,6 +371,10 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointJwtRefresh jwtRefresh;
 
+  late final EndpointMenuSeed menuSeed;
+
+  late final EndpointRag rag;
+
   late final EndpointGreeting greeting;
 
   late final Modules modules;
@@ -332,6 +384,8 @@ class Client extends _i1.ServerpodClientShared {
     'ai': ai,
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
+    'menuSeed': menuSeed,
+    'rag': rag,
     'greeting': greeting,
   };
 

@@ -49,20 +49,25 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
     });
     _scrollToBottom();
 
-    await viewModel.generateRecipe(text);
+    // Use RAG chat instead of recipe generation
+    await viewModel.chatWithRAG(text);
 
     setState(() {
       if (viewModel.resultMessage != null) {
-        _messages.add(ChatMessage(
-          text: viewModel.resultMessage!,
-          isUser: false,
-        ));
+        _messages.add(
+          ChatMessage(
+            text: viewModel.resultMessage!,
+            isUser: false,
+          ),
+        );
       } else if (viewModel.errorMessage != null) {
-        _messages.add(ChatMessage(
-          text: viewModel.errorMessage!,
-          isUser: false,
-          isError: true,
-        ));
+        _messages.add(
+          ChatMessage(
+            text: viewModel.errorMessage!,
+            isUser: false,
+            isError: true,
+          ),
+        );
       }
     });
     _scrollToBottom();
@@ -70,18 +75,17 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
 
   @override
   Widget buildAppBarTitle(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         CircleAvatar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           child: Icon(
-            Icons.restaurant_menu,
+            Icons.fastfood,
             color: Theme.of(context).colorScheme.onPrimaryContainer,
           ),
         ),
         const SizedBox(width: 12),
-        Text(l10n.recipeGenerator),
+        const Text('Food Court Assistant'),
       ],
     );
   }
@@ -118,7 +122,8 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                       const SizedBox(height: 16),
                       Text(
                         'Start a conversation!',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
                               color: Theme.of(context).colorScheme.outline,
                             ),
                       ),
@@ -128,7 +133,8 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                         child: Text(
                           'Ask me for recipe ideas based on your ingredients',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.outline,
                               ),
                         ),
@@ -154,7 +160,9 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.secondaryContainer,
                   child: Icon(
                     Icons.restaurant_menu,
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -163,7 +171,10 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                 ),
                 const SizedBox(width: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(20),
@@ -176,14 +187,18 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                         height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSecondaryContainer,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         'Thinking...',
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSecondaryContainer,
                         ),
                       ),
                     ],
@@ -219,7 +234,9 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      fillColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 12,
@@ -268,8 +285,9 @@ class _ChatBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        mainAxisAlignment:
-            message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: message.isUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!message.isUser) ...[
@@ -294,13 +312,17 @@ class _ChatBubble extends StatelessWidget {
                 color: message.isUser
                     ? Theme.of(context).colorScheme.primaryContainer
                     : message.isError
-                        ? Theme.of(context).colorScheme.errorContainer
-                        : Theme.of(context).colorScheme.secondaryContainer,
+                    ? Theme.of(context).colorScheme.errorContainer
+                    : Theme.of(context).colorScheme.secondaryContainer,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(20),
                   topRight: const Radius.circular(20),
-                  bottomLeft: message.isUser ? const Radius.circular(20) : const Radius.circular(4),
-                  bottomRight: message.isUser ? const Radius.circular(4) : const Radius.circular(20),
+                  bottomLeft: message.isUser
+                      ? const Radius.circular(20)
+                      : const Radius.circular(4),
+                  bottomRight: message.isUser
+                      ? const Radius.circular(4)
+                      : const Radius.circular(20),
                 ),
               ),
               child: Text(
@@ -309,8 +331,8 @@ class _ChatBubble extends StatelessWidget {
                   color: message.isUser
                       ? Theme.of(context).colorScheme.onPrimaryContainer
                       : message.isError
-                          ? Theme.of(context).colorScheme.onErrorContainer
-                          : Theme.of(context).colorScheme.onSecondaryContainer,
+                      ? Theme.of(context).colorScheme.onErrorContainer
+                      : Theme.of(context).colorScheme.onSecondaryContainer,
                   fontSize: 15,
                 ),
               ),

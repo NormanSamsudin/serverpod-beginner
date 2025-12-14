@@ -10,5 +10,11 @@ emailIdp:
   - finishPasswordReset:
 jwtRefresh:
   - refreshAccessToken:
+menuSeed:
+  - seedMenuData:
+rag:
+  - chat:
+  - generateMenuEmbedding:
+  - generateAllEmbeddings:
 greeting:
   - hello:

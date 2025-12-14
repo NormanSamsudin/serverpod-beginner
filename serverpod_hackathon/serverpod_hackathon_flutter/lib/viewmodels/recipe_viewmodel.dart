@@ -43,6 +43,34 @@ class RecipeViewModel extends ChangeNotifier {
     }
   }
 
+  /// Chat with RAG (Retrieval-Augmented Generation) system
+  Future<void> chatWithRAG(String message) async {
+    if (message.trim().isEmpty) {
+      _errorMessage = 'Please enter a message';
+      notifyListeners();
+      return;
+    }
+
+    try {
+      _isLoading = true;
+      _errorMessage = null;
+      _resultMessage = null;
+      notifyListeners();
+
+      // Call the RAG endpoint for semantic search and AI-powered responses
+      final result = await _client.rag.chat(message);
+
+      _resultMessage = result;
+      _errorMessage = null;
+    } catch (e) {
+      _errorMessage = e.toString();
+      _resultMessage = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   /// Clears the current state
   void clearState() {
     _resultMessage = null;

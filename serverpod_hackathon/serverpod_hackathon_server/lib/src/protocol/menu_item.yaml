@@ -1,0 +1,17 @@
+class: MenuItem
+table: menu_item
+fields:
+  restaurantName: String
+  name: String
+  description: String
+  price: double
+  category: String # Main Course, Drinks, Desserts, etc.
+  cuisine: String # Chinese, Malay, Indian, Western, etc.
+  isVegetarian: bool, default=false
+  isHalal: bool, default=false
+  spicyLevel: int, default=0 # 0-5 scale
+  allergens: String? # Comma-separated
+  tags: String? # Popular, recommended, etc.
+  imageUrl: String?
+  # Vector embedding for RAG (stored as array of floats)
+  embedding: String? # JSON array of embedding values
