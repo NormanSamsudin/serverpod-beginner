@@ -1,6 +1,7 @@
 import 'package:serverpod_hackathon_client/serverpod_hackathon_client.dart';
 import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:serverpod_hackathon_flutter/l10n/app_localizations.dart';
 import 'package:serverpod_hackathon_flutter/router/app_router.dart';
@@ -8,6 +9,7 @@ import 'package:serverpod_hackathon_flutter/viewmodels/recipe_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/auth_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/greeting_viewmodel.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'firebase_options.dart';
 
 /// Sets up a global client object that can be used to talk to the server from
 /// anywhere in our app. The client is generated from your server code
@@ -18,7 +20,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 /// instead of using a global client object. This is just a simple example.
 late final Client client;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   // When you are running the app on a physical device, you need to set the
   // server URL to the IP address of your computer. You can find the IP
   // address by running `ipconfig` on Windows or `ifconfig` on Mac/Linux.
@@ -45,7 +54,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RecipeViewModel(client)),
-        ChangeNotifierProvider(create: (_) => AuthViewModel(client)),
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => GreetingViewModel(client)),
       ],
       child: MaterialApp.router(

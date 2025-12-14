@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1054706070242",
+    "project_id": "serverpod-hackathon",
+    "storage_bucket": "serverpod-hackathon.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054706070242:android:91327fdac08319f313e4bb",
+        "android_client_info": {
+          "package_name": "com.example.serverpod_hackathon_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdIlI-gKzhrCvnwfnU38KV1N_zLEY_k_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
