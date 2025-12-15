@@ -14,13 +14,15 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../ai_endpoint.dart' as _i2;
 import '../endpoints/email_idp_endpoint.dart' as _i3;
 import '../endpoints/jwt_refresh_endpoint.dart' as _i4;
-import '../endpoints/menu_seed_endpoint.dart' as _i5;
-import '../endpoints/rag_endpoint.dart' as _i6;
-import '../greeting_endpoint.dart' as _i7;
+import '../endpoints/menu_endpoint.dart' as _i5;
+import '../endpoints/menu_seed_endpoint.dart' as _i6;
+import '../endpoints/rag_endpoint.dart' as _i7;
+import '../greeting_endpoint.dart' as _i8;
+import 'package:serverpod_hackathon_server/src/generated/menu_item.dart' as _i9;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
-    as _i8;
+    as _i10;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
-    as _i9;
+    as _i11;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -44,19 +46,25 @@ class Endpoints extends _i1.EndpointDispatch {
           'jwtRefresh',
           null,
         ),
-      'menuSeed': _i5.MenuSeedEndpoint()
+      'menu': _i5.MenuEndpoint()
+        ..initialize(
+          server,
+          'menu',
+          null,
+        ),
+      'menuSeed': _i6.MenuSeedEndpoint()
         ..initialize(
           server,
           'menuSeed',
           null,
         ),
-      'rag': _i6.RagEndpoint()
+      'rag': _i7.RagEndpoint()
         ..initialize(
           server,
           'rag',
           null,
         ),
-      'greeting': _i7.GreetingEndpoint()
+      'greeting': _i8.GreetingEndpoint()
         ..initialize(
           server,
           'greeting',
@@ -281,6 +289,40 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
+    connectors['menu'] = _i1.EndpointConnector(
+      name: 'menu',
+      endpoint: endpoints['menu']!,
+      methodConnectors: {
+        'createMenuItem': _i1.MethodConnector(
+          name: 'createMenuItem',
+          params: {
+            'item': _i1.ParameterDescription(
+              name: 'item',
+              type: _i1.getType<_i9.MenuItem>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['menu'] as _i5.MenuEndpoint).createMenuItem(
+                session,
+                params['item'],
+              ),
+        ),
+        'getAllMenuItems': _i1.MethodConnector(
+          name: 'getAllMenuItems',
+          params: {},
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['menu'] as _i5.MenuEndpoint)
+                  .getAllMenuItems(session),
+        ),
+      },
+    );
     connectors['menuSeed'] = _i1.EndpointConnector(
       name: 'menuSeed',
       endpoint: endpoints['menuSeed']!,
@@ -292,7 +334,7 @@ class Endpoints extends _i1.EndpointDispatch {
               (
                 _i1.Session session,
                 Map<String, dynamic> params,
-              ) async => (endpoints['menuSeed'] as _i5.MenuSeedEndpoint)
+              ) async => (endpoints['menuSeed'] as _i6.MenuSeedEndpoint)
                   .seedMenuData(session),
         ),
       },
@@ -314,7 +356,7 @@ class Endpoints extends _i1.EndpointDispatch {
               (
                 _i1.Session session,
                 Map<String, dynamic> params,
-              ) async => (endpoints['rag'] as _i6.RagEndpoint).chat(
+              ) async => (endpoints['rag'] as _i7.RagEndpoint).chat(
                 session,
                 params['userMessage'],
               ),
@@ -333,7 +375,7 @@ class Endpoints extends _i1.EndpointDispatch {
                 _i1.Session session,
                 Map<String, dynamic> params,
               ) async =>
-                  (endpoints['rag'] as _i6.RagEndpoint).generateMenuEmbedding(
+                  (endpoints['rag'] as _i7.RagEndpoint).generateMenuEmbedding(
                     session,
                     params['menuItemId'],
                   ),
@@ -345,7 +387,7 @@ class Endpoints extends _i1.EndpointDispatch {
               (
                 _i1.Session session,
                 Map<String, dynamic> params,
-              ) async => (endpoints['rag'] as _i6.RagEndpoint)
+              ) async => (endpoints['rag'] as _i7.RagEndpoint)
                   .generateAllEmbeddings(session),
         ),
       },
@@ -367,16 +409,16 @@ class Endpoints extends _i1.EndpointDispatch {
               (
                 _i1.Session session,
                 Map<String, dynamic> params,
-              ) async => (endpoints['greeting'] as _i7.GreetingEndpoint).hello(
+              ) async => (endpoints['greeting'] as _i8.GreetingEndpoint).hello(
                 session,
                 params['name'],
               ),
         ),
       },
     );
-    modules['serverpod_auth_idp'] = _i8.Endpoints()
+    modules['serverpod_auth_idp'] = _i10.Endpoints()
       ..initializeEndpoints(server);
-    modules['serverpod_auth_core'] = _i9.Endpoints()
+    modules['serverpod_auth_core'] = _i11.Endpoints()
       ..initializeEndpoints(server);
   }
 }

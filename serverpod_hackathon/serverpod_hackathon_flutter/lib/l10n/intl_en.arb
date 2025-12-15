@@ -1,0 +1,13 @@
+{
+    "hello": "Hello World",
+    "@hello": {
+        "description": "A welcome message"
+    },
+    "ingredients": "ingredients",
+    "norman": "Norman",
+    "home": "Home",
+    "profile": "Profile",
+    "setting": "Setting",
+    "noResponseYet": "No response yet",
+    "menuAppRecomendation": "Menu App Recomendation"
+}

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serverpod_hackathon_flutter/l10n/app_localizations.dart';
+import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
 import 'package:serverpod_hackathon_flutter/router/app_router.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/auth_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/base_screen.dart';
@@ -17,7 +17,7 @@ class ProfileScreen extends BaseScreen {
 class _ProfileScreenState extends BaseScreenState<ProfileScreen> {
   @override
   Widget buildAppBarTitle(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = S.of(context);
     return Text(l10n.profile);
   }
 

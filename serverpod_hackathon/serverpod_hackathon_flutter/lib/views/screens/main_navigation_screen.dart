@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:serverpod_hackathon_flutter/l10n/app_localizations.dart';
+import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
 import 'package:serverpod_hackathon_flutter/router/app_router.dart';
 
 @RoutePage()
@@ -9,8 +9,6 @@ class MainNavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return AutoTabsScaffold(
       routes: const [
         HomeRoute(),
@@ -24,15 +22,15 @@ class MainNavigationScreen extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Icons.home),
-              label: l10n.homeTab,
+              label: S.current.home,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.person),
-              label: l10n.profileTab,
+              label: S.current.profile,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.settings),
-              label: l10n.settingsTab,
+              label: S.current.setting,
             ),
           ],
         );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:serverpod_hackathon_flutter/l10n/app_localizations.dart';
+import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
 import 'package:serverpod_hackathon_flutter/router/app_router.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/recipe_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/auth_viewmodel.dart';
@@ -34,12 +34,9 @@ void main() async {
   // You can set the variable when running or building your app like this:
   // E.g. `flutter run --dart-define=SERVER_URL=https://api.example.com/`
   const serverUrlFromEnv = String.fromEnvironment('SERVER_URL');
-  final serverUrl = serverUrlFromEnv.isEmpty
-      ? 'http://$localhost:8080/'
-      : serverUrlFromEnv;
+  final serverUrl = serverUrlFromEnv.isEmpty ? 'http://$localhost:8080/' : serverUrlFromEnv;
 
-  client = Client(serverUrl)
-    ..connectivityMonitor = FlutterConnectivityMonitor();
+  client = Client(serverUrl)..connectivityMonitor = FlutterConnectivityMonitor();
 
   runApp(MyApp());
 }
@@ -65,14 +62,12 @@ class MyApp extends StatelessWidget {
         ),
         routerConfig: _appRouter.config(),
         localizationsDelegates: const [
-          AppLocalizations.delegate,
+          S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
-          Locale('en'),
-        ],
+        supportedLocales: S.delegate.supportedLocales,
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:serverpod_hackathon_flutter/l10n/app_localizations.dart';
+import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
 
 /// ResultDisplay shows the result of the call. Either the returned result
 /// from the endpoint method or an error message.
@@ -11,8 +11,6 @@ class ResultDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     String text;
     Color backgroundColor;
 
@@ -24,7 +22,7 @@ class ResultDisplay extends StatelessWidget {
       text = resultMessage!;
     } else {
       backgroundColor = Colors.grey[300]!;
-      text = l10n.noResponseYet;
+      text = S.current.noResponseYet;
     }
 
     return ConstrainedBox(

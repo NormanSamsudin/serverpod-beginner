@@ -10,6 +10,9 @@ emailIdp:
   - finishPasswordReset:
 jwtRefresh:
   - refreshAccessToken:
+menu:
+  - createMenuItem:
+  - getAllMenuItems:
 menuSeed:
   - seedMenuData:
 rag:
