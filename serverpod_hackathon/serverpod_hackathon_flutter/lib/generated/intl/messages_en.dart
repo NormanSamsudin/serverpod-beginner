@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuAppRecomendation": MessageLookupByLibrary.simpleMessage(
       "Menu App Recomendation",
     ),
+    "menuTab": MessageLookupByLibrary.simpleMessage("Menu"),
     "noResponseYet": MessageLookupByLibrary.simpleMessage("No response yet"),
     "norman": MessageLookupByLibrary.simpleMessage("Norman"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),

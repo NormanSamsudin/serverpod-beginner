@@ -91,6 +91,22 @@ class MainNavigationRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [MenuScreen]
+class MenuRoute extends PageRouteInfo<void> {
+  const MenuRoute({List<PageRouteInfo>? children})
+    : super(MenuRoute.name, initialChildren: children);
+
+  static const String name = 'MenuRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MenuScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})

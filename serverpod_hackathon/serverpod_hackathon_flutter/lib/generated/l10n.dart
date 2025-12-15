@@ -89,6 +89,11 @@ class S {
     return Intl.message('Setting', name: 'setting', desc: '', args: []);
   }
 
+  /// `Menu`
+  String get menuTab {
+    return Intl.message('Menu', name: 'menuTab', desc: '', args: []);
+  }
+
   /// `No response yet`
   String get noResponseYet {
     return Intl.message(

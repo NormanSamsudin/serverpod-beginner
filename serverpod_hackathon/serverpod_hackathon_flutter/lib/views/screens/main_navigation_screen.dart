@@ -12,17 +12,23 @@ class MainNavigationScreen extends StatelessWidget {
     return AutoTabsScaffold(
       routes: const [
         HomeRoute(),
+        MenuRoute(),
         ProfileRoute(),
         SettingsRoute(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Icons.home),
               label: S.current.home,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.restaurant_menu),
+              label: S.current.menuTab,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.person),
