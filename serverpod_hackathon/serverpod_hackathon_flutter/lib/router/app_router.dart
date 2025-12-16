@@ -6,6 +6,8 @@ import 'package:serverpod_hackathon_flutter/views/screens/profile_screen.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/register_screen.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/settings_screen.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/main_navigation_screen.dart';
+import 'package:serverpod_hackathon_flutter/views/screens/admin/add_menu_screen.dart';
+import 'package:serverpod_hackathon_flutter/views/screens/menu_screen.dart';
 
 part 'app_router.gr.dart';
 
@@ -20,11 +22,15 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: RegisterRoute.page),
 
+    // Admin routes
+    AutoRoute(page: AddMenuRoute.page),
+
     // Main app (protected, requires auth)
     AutoRoute(
       page: MainNavigationRoute.page,
       children: [
         AutoRoute(page: HomeRoute.page, initial: true),
+        AutoRoute(page: MenuRoute.page),
         AutoRoute(page: ProfileRoute.page),
         AutoRoute(page: SettingsRoute.page),
       ],

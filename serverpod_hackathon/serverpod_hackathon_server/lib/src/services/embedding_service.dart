@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'dart:convert';
 
 class EmbeddingService {
   final String apiKey;

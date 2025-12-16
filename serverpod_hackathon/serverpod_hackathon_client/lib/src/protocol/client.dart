@@ -16,8 +16,9 @@ import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _i3;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _i4;
-import 'package:serverpod_hackathon_client/src/protocol/greeting.dart' as _i5;
-import 'protocol.dart' as _i6;
+import 'package:serverpod_hackathon_client/src/protocol/menu_item.dart' as _i5;
+import 'package:serverpod_hackathon_client/src/protocol/greeting.dart' as _i6;
+import 'protocol.dart' as _i7;
 
 /// This is the endpoint that will be used to generate a recipe using the
 /// Google Gemini API. It extends the Endpoint class and implements the
@@ -253,6 +254,28 @@ class EndpointJwtRefresh extends _i4.EndpointRefreshJwtTokens {
 }
 
 /// {@category Endpoint}
+class EndpointMenu extends _i1.EndpointRef {
+  EndpointMenu(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'menu';
+
+  _i2.Future<bool> createMenuItem(_i5.MenuItem item) =>
+      caller.callServerEndpoint<bool>(
+        'menu',
+        'createMenuItem',
+        {'item': item},
+      );
+
+  _i2.Future<List<_i5.MenuItem>> getAllMenuItems() =>
+      caller.callServerEndpoint<List<_i5.MenuItem>>(
+        'menu',
+        'getAllMenuItems',
+        {},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointMenuSeed extends _i1.EndpointRef {
   EndpointMenuSeed(_i1.EndpointCaller caller) : super(caller);
 
@@ -308,8 +331,8 @@ class EndpointGreeting extends _i1.EndpointRef {
   String get name => 'greeting';
 
   /// Returns a personalized greeting message: "Hello {name}".
-  _i2.Future<_i5.Greeting> hello(String name) =>
-      caller.callServerEndpoint<_i5.Greeting>(
+  _i2.Future<_i6.Greeting> hello(String name) =>
+      caller.callServerEndpoint<_i6.Greeting>(
         'greeting',
         'hello',
         {'name': name},
@@ -347,7 +370,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i6.Protocol(),
+         _i7.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,
@@ -359,6 +382,7 @@ class Client extends _i1.ServerpodClientShared {
     ai = EndpointAi(this);
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
+    menu = EndpointMenu(this);
     menuSeed = EndpointMenuSeed(this);
     rag = EndpointRag(this);
     greeting = EndpointGreeting(this);
@@ -370,6 +394,8 @@ class Client extends _i1.ServerpodClientShared {
   late final EndpointEmailIdp emailIdp;
 
   late final EndpointJwtRefresh jwtRefresh;
+
+  late final EndpointMenu menu;
 
   late final EndpointMenuSeed menuSeed;
 
@@ -384,6 +410,7 @@ class Client extends _i1.ServerpodClientShared {
     'ai': ai,
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
+    'menu': menu,
     'menuSeed': menuSeed,
     'rag': rag,
     'greeting': greeting,

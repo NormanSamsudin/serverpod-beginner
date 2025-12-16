@@ -38,18 +38,18 @@ class RagEndpoint extends Endpoint {
       final prompt =
           '''You are a helpful food court assistant. Based on the available menu items and the user's question, provide a friendly and informative response.
 
-Available Menu Items:
-$context
+              Available Menu Items:
+              $context
 
-User Question: $userMessage
+              User Question: $userMessage
 
-Instructions:
-- Recommend specific dishes from the menu above
-- Explain why each recommendation fits the user's needs
-- Include prices, dietary info (vegetarian/halal), and spicy levels
-- Be conversational and helpful
-- If the user asks about availability, refer to the items listed above
-''';
+              Instructions:
+              - Recommend specific dishes from the menu above
+              - Explain why each recommendation fits the user's needs
+              - Include prices, dietary info (vegetarian/halal), and spicy levels
+              - Be conversational and helpful
+              - If the user asks about availability, refer to the items listed above
+              ''';
 
       final model = GenerativeModel(
         model: 'gemini-1.5-flash',

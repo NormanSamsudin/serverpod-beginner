@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serverpod_hackathon_flutter/l10n/app_localizations.dart';
+import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/recipe_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/base_screen.dart';
 
@@ -97,12 +97,10 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
   bool get useSafeArea => false;
 
   @override
-  Color? backgroundColor(BuildContext context) =>
-      Theme.of(context).colorScheme.surfaceContainerLow;
+  Color? backgroundColor(BuildContext context) => Theme.of(context).colorScheme.surfaceContainerLow;
 
   @override
   Widget buildBody(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final viewModel = context.watch<RecipeViewModel>();
 
     return Column(
@@ -122,10 +120,9 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                       const SizedBox(height: 16),
                       Text(
                         'Start a conversation!',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Padding(
@@ -133,10 +130,9 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                         child: Text(
                           'Ask me for recipe ideas based on your ingredients',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
                         ),
                       ),
                     ],
@@ -215,7 +211,7 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
             color: Theme.of(context).colorScheme.surface,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: .05),
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),
@@ -228,7 +224,7 @@ class _HomeScreenState extends BaseScreenState<HomeScreen> {
                   child: TextField(
                     controller: _textEditingController,
                     decoration: InputDecoration(
-                      hintText: l10n.enterIngredients,
+                      hintText: S.current.norman,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
@@ -285,9 +281,7 @@ class _ChatBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        mainAxisAlignment: message.isUser
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
+        mainAxisAlignment: message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!message.isUser) ...[
@@ -317,12 +311,8 @@ class _ChatBubble extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(20),
                   topRight: const Radius.circular(20),
-                  bottomLeft: message.isUser
-                      ? const Radius.circular(20)
-                      : const Radius.circular(4),
-                  bottomRight: message.isUser
-                      ? const Radius.circular(4)
-                      : const Radius.circular(20),
+                  bottomLeft: message.isUser ? const Radius.circular(20) : const Radius.circular(4),
+                  bottomRight: message.isUser ? const Radius.circular(4) : const Radius.circular(20),
                 ),
               ),
               child: Text(

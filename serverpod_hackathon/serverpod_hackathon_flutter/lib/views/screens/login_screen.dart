@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:serverpod_hackathon_flutter/router/app_router.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/auth_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/base_screen.dart';
-import 'package:serverpod_hackathon_flutter/views/screens/register_screen.dart';
 
 @RoutePage()
 class LoginScreen extends BaseScreen {

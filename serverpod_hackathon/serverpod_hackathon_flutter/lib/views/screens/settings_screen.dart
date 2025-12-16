@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:serverpod_hackathon_flutter/l10n/app_localizations.dart';
+import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
+import 'package:serverpod_hackathon_flutter/router/app_router.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/base_screen.dart';
 
 @RoutePage()
@@ -14,8 +15,7 @@ class SettingsScreen extends BaseScreen {
 class _SettingsScreenState extends BaseScreenState<SettingsScreen> {
   @override
   Widget buildAppBarTitle(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Text(l10n.settings);
+    return Text(S.current.setting);
   }
 
   @override
@@ -23,8 +23,6 @@ class _SettingsScreenState extends BaseScreenState<SettingsScreen> {
 
   @override
   Widget buildBody(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return ListView(
       children: [
         ListTile(
@@ -47,12 +45,20 @@ class _SettingsScreenState extends BaseScreenState<SettingsScreen> {
         ),
         const Divider(),
         ListTile(
+          leading: const Icon(Icons.admin_panel_settings),
+          title: const Text('Add Menu Item (Admin)'),
+          onTap: () {
+            context.router.push(const AddMenuRoute());
+          },
+        ),
+        const Divider(),
+        ListTile(
           leading: const Icon(Icons.info_outline),
           title: const Text('About'),
           onTap: () {
             showAboutDialog(
               context: context,
-              applicationName: l10n.appTitle,
+              applicationName: S.current.menuAppRecomendation,
               applicationVersion: '1.0.0',
             );
           },

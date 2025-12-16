@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AddMenuScreen]
+class AddMenuRoute extends PageRouteInfo<void> {
+  const AddMenuRoute({List<PageRouteInfo>? children})
+    : super(AddMenuRoute.name, initialChildren: children);
+
+  static const String name = 'AddMenuRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AddMenuScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AuthWrapperScreen]
 class AuthWrapperRoute extends PageRouteInfo<void> {
   const AuthWrapperRoute({List<PageRouteInfo>? children})
@@ -70,6 +86,22 @@ class MainNavigationRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MainNavigationScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [MenuScreen]
+class MenuRoute extends PageRouteInfo<void> {
+  const MenuRoute({List<PageRouteInfo>? children})
+    : super(MenuRoute.name, initialChildren: children);
+
+  static const String name = 'MenuRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MenuScreen();
     },
   );
 }
