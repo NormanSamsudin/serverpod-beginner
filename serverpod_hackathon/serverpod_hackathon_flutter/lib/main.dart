@@ -5,9 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
 import 'package:serverpod_hackathon_flutter/router/app_router.dart';
-import 'package:serverpod_hackathon_flutter/viewmodels/recipe_viewmodel.dart';
+import 'package:serverpod_hackathon_flutter/viewmodels/add_menu_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/auth_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/viewmodels/greeting_viewmodel.dart';
+import 'package:serverpod_hackathon_flutter/viewmodels/menu_viewmodel.dart';
+import 'package:serverpod_hackathon_flutter/viewmodels/recipe_viewmodel.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
 
@@ -50,9 +52,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => RecipeViewModel(client)),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => RecipeViewModel(client)),
         ChangeNotifierProvider(create: (_) => GreetingViewModel(client)),
+        ChangeNotifierProvider(create: (_) => MenuViewModel(client)),
+        ChangeNotifierProvider(create: (_) => AddMenuViewModel(client)),
       ],
       child: MaterialApp.router(
         title: 'Serverpod Recipe',

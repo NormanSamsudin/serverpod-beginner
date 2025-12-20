@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:serverpod_hackathon_client/serverpod_hackathon_client.dart';
-import 'package:serverpod_hackathon_flutter/main.dart';
 import 'package:serverpod_hackathon_flutter/generated/l10n.dart';
+import 'package:serverpod_hackathon_flutter/viewmodels/menu_viewmodel.dart';
 import 'package:serverpod_hackathon_flutter/views/screens/base_screen.dart';
 
 @RoutePage()
@@ -14,33 +15,13 @@ class MenuScreen extends BaseScreen {
 }
 
 class _MenuScreenState extends BaseScreenState<MenuScreen> {
-  List<MenuItem>? _menuItems;
-  bool _isLoading = true;
-  String? _error;
-
   @override
   void initState() {
     super.initState();
-    _fetchMenu();
-  }
-
-  Future<void> _fetchMenu() async {
-    try {
-      final items = await client.menu.getAllMenuItems();
-      if (mounted) {
-        setState(() {
-          _menuItems = items;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _error = e.toString();
-          _isLoading = false;
-        });
-      }
-    }
+    // Fetch menu items when screen initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<MenuViewModel>().fetchMenuItems();
+    });
   }
 
   @override
@@ -50,25 +31,27 @@ class _MenuScreenState extends BaseScreenState<MenuScreen> {
 
   @override
   Widget buildBody(BuildContext context) {
-    if (_isLoading) {
+    final menuViewModel = context.watch<MenuViewModel>();
+
+    if (menuViewModel.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (_error != null) {
-      return Center(child: Text('Error: $_error'));
+    if (menuViewModel.errorMessage != null) {
+      return Center(child: Text('Error: ${menuViewModel.errorMessage}'));
     }
 
-    if (_menuItems == null || _menuItems!.isEmpty) {
+    if (menuViewModel.menuItems == null || menuViewModel.menuItems!.isEmpty) {
       return const Center(child: Text('No menu items found.'));
     }
 
     return RefreshIndicator(
-      onRefresh: _fetchMenu,
+      onRefresh: () => menuViewModel.refreshMenuItems(),
       child: ListView.builder(
         padding: const EdgeInsets.all(8),
-        itemCount: _menuItems!.length,
+        itemCount: menuViewModel.menuItems!.length,
         itemBuilder: (context, index) {
-          final item = _menuItems![index];
+          final item = menuViewModel.menuItems![index];
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             child: ListTile(

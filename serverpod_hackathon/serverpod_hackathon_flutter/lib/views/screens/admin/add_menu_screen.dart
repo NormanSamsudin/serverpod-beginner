@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:serverpod_hackathon_client/serverpod_hackathon_client.dart';
-import 'package:serverpod_hackathon_flutter/main.dart';
+import 'package:serverpod_hackathon_flutter/viewmodels/add_menu_viewmodel.dart';
 
 @RoutePage()
 class AddMenuScreen extends StatefulWidget {
@@ -24,48 +25,33 @@ class _AddMenuScreenState extends State<AddMenuScreen> {
   bool _isHalal = false;
   int _spicyLevel = 0;
 
-  bool _isLoading = false;
-
   Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      setState(() {
-        _isLoading = true;
-      });
+      final addMenuViewModel = context.read<AddMenuViewModel>();
+      final success = await addMenuViewModel.createMenuItem(
+        restaurantName: _restaurantName,
+        name: _name,
+        description: _description,
+        price: _price,
+        category: _category,
+        cuisine: _cuisine,
+        isVegetarian: _isVegetarian,
+        isHalal: _isHalal,
+        spicyLevel: _spicyLevel,
+      );
 
-      try {
-        final newItem = MenuItem(
-          restaurantName: _restaurantName,
-          name: _name,
-          description: _description,
-          price: _price,
-          category: _category,
-          cuisine: _cuisine,
-          isVegetarian: _isVegetarian,
-          isHalal: _isHalal,
-          spicyLevel: _spicyLevel,
-        );
-
-        await client.menu.createMenuItem(newItem);
-
-        if (mounted) {
+      if (mounted) {
+        if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Menu item added successfully!')),
+            SnackBar(content: Text(addMenuViewModel.successMessage ?? 'Success')),
           );
           context.router.back();
-        }
-      } catch (e) {
-        if (mounted) {
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error adding menu item: $e')),
+            SnackBar(content: Text(addMenuViewModel.errorMessage ?? 'Error')),
           );
-        }
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
         }
       }
     }
@@ -73,6 +59,8 @@ class _AddMenuScreenState extends State<AddMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final addMenuViewModel = context.watch<AddMenuViewModel>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Menu Item'),
@@ -143,8 +131,10 @@ class _AddMenuScreenState extends State<AddMenuScreen> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: _isLoading ? null : _submit,
-                child: _isLoading ? const CircularProgressIndicator() : const Text('Add Menu Item'),
+                onPressed: addMenuViewModel.isLoading ? null : _submit,
+                child: addMenuViewModel.isLoading 
+                    ? const CircularProgressIndicator() 
+                    : const Text('Add Menu Item'),
               ),
             ],
           ),
